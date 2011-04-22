@@ -75,7 +75,7 @@ function template_add($template,$name="exist.htm"){
 		return false;
 	$array_vars = __template_parse_vars($template);
      
-$path = "/var/www/".$name;
+$path = $_SERVER['DOCUMENT_ROOT']."/".$name;
 
 
 if (__template_create_file($path,$template) == false)
