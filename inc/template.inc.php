@@ -71,11 +71,11 @@ echo $path;
  * Добавление шаблона
  */
 function template_add($template,$name="exist.htm"){
-	if (__template_check($template) == true || empty($template))
+	if (__template_check($name) == true || empty($template))
 		return false;
 	$array_vars = __template_parse_vars($template);
      
-$path = $_SERVER['DOCUMENT_ROOT']."/".$name;
+$path = "/var/www/".$name;
 
 
 if (__template_create_file($path,$template) == false)
