@@ -7,7 +7,7 @@
 
 
 $template_delete[] = array(
-        'args'=>array('exist'),
+        'args'=>array('creating'),
         'etalon'=>true,
         'description'=>'Проверка работоспособности удаления при существующем шаблоне'
 );
@@ -27,7 +27,7 @@ $template_delete[] = array(
 
 
 $template_update[] = array(
-        'args'=>array('exist', array(1)),
+        'args'=>array('creating', array(1)),
         'etalon'=>true,
         'description'=>'Проверка работоспособности изменений при существующем шаблоне'
 );

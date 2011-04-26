@@ -48,10 +48,13 @@ return $array_vars;
  * Создание файла (функция драйвера)
  */
 function __template_create_file($path,$file){
-echo $path;
+
     $f = file_put_contents($path, $file);
-        if (!is_file($path))
-            return false;        
+        if (!is_file($path)) {
+            return false;  
+        }
+        
+    return true;
 }
 
 
@@ -59,6 +62,7 @@ echo $path;
  * Добавление шаблона
  */
 function template_add($template,$name){
+    clearstatcache(); //очищаем кеш
         if (empty($template))
 		return 0;
 	if (__template_check($name) == true)
