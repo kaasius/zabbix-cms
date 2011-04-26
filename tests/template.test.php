@@ -63,8 +63,23 @@ $template_add[] = array(
 );
 
 
+$template_fetch[] = array(
+        'args'=>array('creating', ''),
+        'etalon'=>0,
+        'description'=>'Проверка обработки переменных в шаблоне'
+);
+
+$template_fetch[] = array(
+        'args'=>array('', ''),
+        'etalon'=>0,
+        'description'=>'Проверка обработки переменных в шаблоне, если он не существует'
+);
+
+
+
 utest_test_function('template_add', $template_add);
 utest_test_function('template_update', $template_update);
+utest_test_function('template_fetch', $template_fetch);
 utest_test_function('template_delete', $template_delete);
 //utest_message('Functions template_delete');
 ?>

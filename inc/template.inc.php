@@ -34,7 +34,7 @@ function __template_parse_vars($template){
 
     $array_vars = array();
 
-    preg_match_all("/{[^{+^}]*}/", $template, $vars);
+    preg_match_all("/{[^{+^}]*}*/", $template, $vars);
 //    	echo "Список переменных: <br /><br />";
 	    for ($i=0; $i< count($vars[0]); $i++) {
 //		 echo "$i:  " . $vars[0][$i] . "<br />";
@@ -125,12 +125,27 @@ function template_update($name,$array_new_vars){
  * Обрабатываем переменные в шаблоне (прототип)
  */
 function template_fetch($name, $params){
+
+    $arr = array();
+    $arr["GROUPID"] = array("value"=>"", "type"=>"text");
+    $arr["{NAME}"] = array("value"=>"", "type"=>"text");
+    $template = '<div class="title"><a href="/archiv_news/group:{GROUPID}}}" class="groupnews">
+        <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
+        </div>
+	{TR_NEWS}
+	<br>
+	<div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>';
+    
     
 	if (__template_check($name) == false)
 		return 0;    
-
-        $tpl = preg_replace("/{[^{+^}]*}/", $replacement, $template);
-        
-        return $tpl;
+            foreach($arr as $key => $tmpl) {                  
+                foreach($tmpl as $type => $val){
+                    $tpl = preg_replace("/{[^{+^}]*$key*/", "", $template);            
+                }
+            }
+        echo var_dump($tpl);
+//        return $tpl;
+        return true;
 }
 ?>
