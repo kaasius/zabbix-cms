@@ -46,15 +46,20 @@ $template_update[] = array(
 
 
 $template_add[] = array(
-        'args'=>array('creating', ''),
+        'args'=>array('<div class="title"><a href="/archiv_news/group:{GROUPID}" class="groupnews">
+        <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
+        </div>
+	{TR_NEWS}
+	<br>
+	<div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>', 'creating'),
         'etalon'=>true,
         'description'=>'Проверка работоспособности добавления шаблона'
 );
 
 $template_add[] = array(
-        'args'=>array('not_creating', ''),
-        'etalon'=>false,
-        'description'=>'Проверка работоспособности добавления шаблона'
+        'args'=>array('', ''),
+        'etalon'=>0,
+        'description'=>'Проверка работоспособности добавления шаблона при пустом названии или файле'
 );
 
 

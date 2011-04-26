@@ -4,18 +4,6 @@
  */
 
 
-//это для теста
-$tmp = '<div class="title"><a href="/archiv_news/group:{GROUPID}" class="groupnews">
-        <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
-        </div>
-	{TR_NEWS}
-	<br>
-	<div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>';
-
-
-template_add($tmp);
-//это для теста
-
 
 
 /*
@@ -70,9 +58,11 @@ echo $path;
 /*
  * Добавление шаблона
  */
-function template_add($template,$name="exist.htm"){
-	if (__template_check($name) == true || empty($template))
-		return false;
+function template_add($template,$name){
+        if (empty($template))
+		return 0;
+	if (__template_check($name) == true)
+		return 1;
 	$array_vars = __template_parse_vars($template);
      
 $path = $_SERVER['DOCUMENT_ROOT']."/".$name;
@@ -128,9 +118,15 @@ function template_update($name,$array_new_vars){
 
 
 /*
- * Ещё какая-то штука с шаблоном
+ * Обрабатываем переменные в шаблоне (прототип)
  */
 function template_fetch($name, $params){
+    
+	if (__template_check($name) == false)
+		return 0;    
 
+        $tpl = preg_replace("/{[^{+^}]*}/", $replacement, $template);
+        
+        return $tpl;
 }
 ?>
