@@ -16,9 +16,18 @@ function load_template($name){
     $preset=array();
     $preset['44006c0f5d1eaa95c6db0789266db2b0']=array( //существует шаблон -> загружаем    
         'vars'=>serialize(array(
-            'name_var'=>'GROUPID',
-            'var_value'=>'номер_группы',
-            'type'=>'text'
+            'GROUPID'=>serialize(array(
+                'value'=>'номер_группы',
+                'type'=>'text'
+                    )),
+            'NAME'=>serialize(array(
+                'value'=>'имя',
+                'type'=>'text' 
+                    )),
+            'TR_NEWS'=>serialize(array(
+                'value'=>'тест',
+                'type'=>'text' 
+                    ))
             )),
         'html'=>'<div class="title"><a href="/archiv_news/group:{GROUPID}" class="groupnews">
         <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
@@ -56,7 +65,7 @@ function save_template($name, $html, $vars, $create){
         <br>
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>',
         'vars'=>serialize(array(
-            'name_var'=>'GROUPID',
+            'var_name'=>'GROUPID',
             'var_value'=>'номер_группы',
             'type'=>'text'
             )),
@@ -76,7 +85,7 @@ function save_template($name, $html, $vars, $create){
         <br>
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>',
         'vars'=>serialize(array(
-            'name_var'=>'GROUPID',
+            'var_name'=>'GROUPID',
             'var_value'=>'номер_группы',
             'type'=>'text'
             )),        

@@ -3,6 +3,9 @@
 Библиотека для работы с шаблонами
  */
 
+if(!defined('TEST_MODE')) define("TEST_MODE",true);
+require_once("errors.list.php");
+require_once("template.driver.php");
 
 
 /*
@@ -35,7 +38,7 @@ return $array_vars;
 /*
  * Добавление шаблона
  */
-function template_add($template,$name,$create=true){
+function template_add($template,$name,$create=false){
         if (empty($template))
 		return 0;
 	$array_vars = __template_parse_vars($template);
@@ -91,24 +94,23 @@ function template_update($name,$array_new_vars){
 
 }
 
-
+template_fetch('exist');
 
 /*
  * Обрабатываем переменные в шаблоне (прототип)
  */
-function template_fetch($name, $params){    
+function template_fetch($name){    
     
-    $arr = load_template('exist');
+    $arr = load_template($name);
     if ($arr == false)
         return false;
-    $arr_vars = $arr['vars'];
-    $template = $arr['html'];
+    $arr_vars = unserialize($arr['vars']);
+    $tpl = $arr['html'];
     
-            foreach($arr_vars as $key => $tmpl){                  
-                foreach($tmpl as $type => $val){
-                    $tpl = preg_replace("/{[^{+^}]*$key*/", "", $template);            
-                }
-            }
+            foreach($arr_vars as $key=>$val_s){ 
+                $val = unserialize($val_s);
+                $tpl = preg_replace("/{".$key."}/", $val['value'], $tpl);
+            }    
         echo var_dump($tpl);
 //        return $tpl;
         return true;
