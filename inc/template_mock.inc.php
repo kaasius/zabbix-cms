@@ -30,11 +30,7 @@ function load_template(){
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>'
         );
     
-    $preset['cac3a07c1243196f5e369364183afcb2']=array( //шаблон не существует
-        'template_name'=>'not_exist',
-        'html'=>'',
-        'vars'=>''
-        );    
+    $preset['cac3a07c1243196f5e369364183afcb2']='false'; //шаблон не существует    
 
 
     $key=md5(serialize(func_get_args()));
@@ -65,11 +61,7 @@ function save_template(){
         );
     
     $preset=array();
-    $preset['0c7acb9ab4214df7a55c5223bfb8625c']=array( //шаблон существует и перезапись запрещена
-        'template_name'=>'exist',
-        'html'=>'',
-        'create'=>'false'
-        );    
+    $preset['0c7acb9ab4214df7a55c5223bfb8625c']='false'; //шаблон существует и перезапись запрещена
 
     $preset=array();
     $preset['0422ac27529862c48bca986f48021129']=array( //шаблон сущесвует и перезапись разрешена
