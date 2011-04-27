@@ -14,7 +14,8 @@ require_once("template.driver.php");
 function __template_update_vars($array_new_vars){
     
     $array_old_vars = array();
-    $array_vars = array_merge($array_old_vars, $array_new_vars);    
+    $array_vars = array_merge($array_old_vars, $array_new_vars);   
+    return $array_vars;
 }
 
 
