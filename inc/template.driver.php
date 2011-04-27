@@ -14,6 +14,18 @@ function __template_check($name){
 	    return false;
 }
 
+function driver_template_delete($name){
+
+	if (__template_check($name) == false)
+            return false;
+
+        if (unlink($_SERVER['DOCUMENT_ROOT']."/".$name) == false)
+            return false;
+
+    return true;        
+    
+}
+
 
 function __template_create_file($path,$file){
 

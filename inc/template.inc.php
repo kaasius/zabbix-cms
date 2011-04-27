@@ -39,19 +39,14 @@ return $array_vars;
  * Добавление шаблона
  */
 function template_add($template,$name,$create=false){
-        if (empty($template))
-		return 0;
-	$array_vars = __template_parse_vars($template);
-     
-//$path = $_SERVER['DOCUMENT_ROOT']."/".$name;
-//if (__template_create_file($path,$template) == false)
-//        return false;
-//    else
-//        return true;
-
-if (save_template($name, $template, $array_vars, $create) == false)
+    if (empty($template))
+        return 0;
+    
+    $array_vars = __template_parse_vars($template);
+    
+    if (save_template($name, $template, $array_vars, $create) == false)
         return false;
-
+    
 return true;
 }
 
@@ -61,11 +56,8 @@ return true;
  */
 function template_delete($name){
 
-//	if (__template_check($name) == false || empty($name))
-//            return false;
-//
-//        if (unlink($_SERVER['DOCUMENT_ROOT']."/".$name) == false)
-//            return false;
+    if (driver_template_delete($name) == false)
+        return false;
 
     return true;        
     
@@ -94,12 +86,13 @@ function template_update($name,$array_new_vars){
 
 }
 
-template_fetch('exist');
 
 /*
  * Обрабатываем переменные в шаблоне (прототип)
  */
-function template_fetch($name){    
+function template_fetch($name){ 
+    
+    $args =''; //аргументы kernel_run_script
     
     $arr = load_template($name);
     if ($arr == false)
@@ -109,7 +102,21 @@ function template_fetch($name){
     
             foreach($arr_vars as $key=>$val_s){ 
                 $val = unserialize($val_s);
-                $tpl = preg_replace("/{".$key."}/", $val['value'], $tpl);
+                $type = $val['type'];
+                switch ($type) {
+                    case "text":
+                        $tpl = preg_replace("/{".$key."}/", $val['value'], $tpl);
+                        break;
+                    case "template":
+                        $tpl = template_fetch($val['value']);
+                        break;
+                    case "freescript":
+                        $r = kernel_run_script($val['value'],$args);
+                        $tpl = preg_replace("/{".$key."}/", $r, $tpl);
+                        break;                    
+                    default:
+                        "text";
+                }
             }    
         echo var_dump($tpl);
 //        return $tpl;
