@@ -11,11 +11,10 @@
  */
 
 
-function load_template($name, $vars, $html){
+function load_template($name){
 
     $preset=array();
-    $preset['1251ffef7a077b76711eb4bfa838656e']=array( //существует шаблон -> загружаем
-        'template_name'=>'exist',        
+    $preset['44006c0f5d1eaa95c6db0789266db2b0']=array( //существует шаблон -> загружаем    
         'vars'=>serialize(array(
             'name_var'=>'GROUPID',
             'var_value'=>'номер_группы',
@@ -29,7 +28,7 @@ function load_template($name, $vars, $html){
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>'
         );
     
-    $preset['0d41994c811fb3f9f0155e05ffa74917']=false; //шаблон не существует    
+    $preset['5b448a7bdbeea0be7d7f758f5f8ee90b']=false; //шаблон не существует    
 
 
     $key=md5(serialize(func_get_args()));
@@ -45,10 +44,10 @@ function load_template($name, $vars, $html){
 }
 
 
-function save_template($name, $html, $create){
+function save_template($name, $html, $vars, $create){
 
     $preset=array();
-    $preset['56d1c23025e6b4d9de432a13ee2fa663']=array( //шаблона не существует -> создаём
+    $preset['efa9826e1d2705a0def5b7e21941f2e0']=array( //шаблона не существует -> создаём
         'template_name'=>'not_exist',
         'html'=>'<div class="title"><a href="/archiv_news/group:{GROUPID}" class="groupnews">
         <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
@@ -56,6 +55,11 @@ function save_template($name, $html, $create){
         {TR_NEWS}
         <br>
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>',
+        'vars'=>serialize(array(
+            'name_var'=>'GROUPID',
+            'var_value'=>'номер_группы',
+            'type'=>'text'
+            )),
         'create'=>''      
         );
     
@@ -63,7 +67,7 @@ function save_template($name, $html, $create){
     $preset['0d41994c811fb3f9f0155e05ffa74917']=false; //шаблон существует и перезапись запрещена
 
     $preset=array();
-    $preset['b24d8c5b23bd7e21e00d83bab6cbcf03']=array( //шаблон сущесвует и перезапись разрешена
+    $preset['9ad9791363c4088fe607f4de3919bb3c']=array( //шаблон сущесвует и перезапись разрешена
         'template_name'=>'exist',
         'html'=>'<div class="title"><a href="/archiv_news/group:{GROUPID}" class="groupnews">
         <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
@@ -71,6 +75,11 @@ function save_template($name, $html, $create){
         {TR_NEWS}
         <br>
         <div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>',
+        'vars'=>serialize(array(
+            'name_var'=>'GROUPID',
+            'var_value'=>'номер_группы',
+            'type'=>'text'
+            )),        
         'create'=>'true'     
         );    
 

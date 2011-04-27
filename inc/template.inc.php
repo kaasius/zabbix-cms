@@ -5,18 +5,6 @@
 
 
 
-
-/*
- * Проверяем существует ли шаблон
- */
-function __template_check($name){
-
-	if ( is_file($_SERVER['DOCUMENT_ROOT']."/".$name) )
-	    return true;
-	else
-	    return false;
-}
-
 /*
  * Обновляем переменные
  */
@@ -34,7 +22,7 @@ function __template_parse_vars($template){
 
     $array_vars = array();
 
-    preg_match_all("/{[^{+^}]*}*/", $template, $vars);
+    preg_match_all("/{[A-Za-z0-9_\-]}/", $template, $vars);
 //    	echo "Список переменных: <br /><br />";
 	    for ($i=0; $i< count($vars[0]); $i++) {
 //		 echo "$i:  " . $vars[0][$i] . "<br />";
@@ -45,38 +33,23 @@ return $array_vars;
 
 
 /*
- * Создание файла (функция драйвера)
- */
-function __template_create_file($path,$file){
-
-    $f = file_put_contents($path, $file);
-        if (!is_file($path)) {
-            return false;  
-        }
-        
-    return true;
-}
-
-
-/*
  * Добавление шаблона
  */
-function template_add($template,$name){
-    clearstatcache(); //очищаем кеш
+function template_add($template,$name,$create=true){
         if (empty($template))
 		return 0;
-	if (__template_check($name) == true)
-		return 1;
 	$array_vars = __template_parse_vars($template);
      
-$path = $_SERVER['DOCUMENT_ROOT']."/".$name;
+//$path = $_SERVER['DOCUMENT_ROOT']."/".$name;
+//if (__template_create_file($path,$template) == false)
+//        return false;
+//    else
+//        return true;
 
-
-if (__template_create_file($path,$template) == false)
+if (save_template($name, $template, $array_vars, $create) == false)
         return false;
-    else
-        return true;
 
+return true;
 }
 
 
@@ -85,11 +58,11 @@ if (__template_create_file($path,$template) == false)
  */
 function template_delete($name){
 
-	if (__template_check($name) == false || empty($name))
-            return false;
-
-        if (unlink($_SERVER['DOCUMENT_ROOT']."/".$name) == false)
-            return false;
+//	if (__template_check($name) == false || empty($name))
+//            return false;
+//
+//        if (unlink($_SERVER['DOCUMENT_ROOT']."/".$name) == false)
+//            return false;
 
     return true;        
     
@@ -109,12 +82,11 @@ function template_update($name,$array_new_vars){
             __template_update_vars($array_new_vars);
             return true;            
         } else if (is_file($name) && __template_check($name) == false) {
-            template_add($name);
+            template_add($template,$name,true);
             return true;           
         } else {
             return false;            
         }
-        
         
 
 }
@@ -124,22 +96,15 @@ function template_update($name,$array_new_vars){
 /*
  * Обрабатываем переменные в шаблоне (прототип)
  */
-function template_fetch($name, $params){
-
-    $arr = array();
-    $arr["GROUPID"] = array("value"=>"", "type"=>"text");
-    $arr["{NAME}"] = array("value"=>"", "type"=>"text");
-    $template = '<div class="title"><a href="/archiv_news/group:{GROUPID}}}" class="groupnews">
-        <img src="/design/title_news.gif" alt="" width="86" height="20" border="0"></a>
-        </div>
-	{TR_NEWS}
-	<br>
-	<div align="right"><a href="/archiv_news/group:{GROUPID}" class="link_all_news">Все {NAME} &raquo;</a>';
+function template_fetch($name, $params){    
     
+    $arr = load_template('exist');
+    if ($arr == false)
+        return false;
+    $arr_vars = $arr['vars'];
+    $template = $arr['html'];
     
-	if (__template_check($name) == false)
-		return 0;    
-            foreach($arr as $key => $tmpl) {                  
+            foreach($arr_vars as $key => $tmpl){                  
                 foreach($tmpl as $type => $val){
                     $tpl = preg_replace("/{[^{+^}]*$key*/", "", $template);            
                 }

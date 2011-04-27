@@ -13,6 +13,17 @@ function __template_check($name){
 	else
 	    return false;
 }
+
+
+function __template_create_file($path,$file){
+
+    $f = file_put_contents($path, $file);
+        if (!is_file($path)) {
+            return false;  
+        }
+        
+    return true;
+}
     
 } else {    
     require_once('template_mock.inc.php');
