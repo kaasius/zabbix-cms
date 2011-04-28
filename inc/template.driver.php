@@ -28,8 +28,8 @@ function driver_save_vars($array_vars,$name_tmp_vars){
     $vars_ini = ''; // обнуляем переменную на всякий случай  
     foreach ($array_vars as $key=>$val) {
         $vars_ini .= "[$key]\n";
-        $vars_ini .= "value = ".$val['value']."\n";
-        $vars_ini .= "type = ".$val['type']."\n\n";
+        $vars_ini .= "value = \"".$val['value']."\"\n";
+        $vars_ini .= "type = \"".$val['type']."\"\n\n";
     }
     $t = file_put_contents($path.".ini", $vars_ini);
     return true; 
