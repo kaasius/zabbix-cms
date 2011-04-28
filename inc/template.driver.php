@@ -6,27 +6,34 @@
 
 define("PATH",$_SERVER['DOCUMENT_ROOT']."/tpl/");
 
-//if(true!==TEST_MODE){
-    
 
 function driver_save_template($name, $file, $array_vars, $create){
-    
-    if (is_file(PATH.$name) != true || is_file(PATH.$name) == true && $create == true){
-        $path = PATH.$name;
+    $path = PATH.$name;    
+    if (is_file($path) != true || is_file($path) == true && $create == true){
         file_put_contents($path, $file);
         if (!is_file($path)) {
+            die("1");
             return false;  
         }
-        driver_save_vars($array_vars,$path);
-    } else if (is_file(PATH.$name) == true && $create != true){
+        driver_save_vars($array_vars,$name);
+    } else if (is_file($path) == true && $create != false){
+        die("2");
         return false; 
     }
     return true;
 } 
 
-function driver_save_vars($array_vars,$path){ // только для теста
-        $vars = serialize($array_vars); 
-        file_put_contents(PATH.".var", $vars);    
+function driver_save_vars($array_vars,$name_tmp_vars){ 
+    $path = PATH.$name_tmp_vars; 
+    $vars_ini = ''; // обнуляем переменную на всякий случай  
+    foreach ($array_vars as $key=>$val) {
+        $vars_ini .= "[$key]\n";
+        $vars_ini .= "value = ".$val['value']."\n";
+        $vars_ini .= "type = ".$val['type']."\n\n";
+    }
+    $t = file_put_contents($path.".ini", $vars_ini);
+    return true; 
+    /*доделать эту часть*/
 }  
 
 function driver_load_template($name){
@@ -35,53 +42,25 @@ function driver_load_template($name){
     
 }  
 
-function driver_load_template_vars($name){
-    $vars = unserialize(file_get_contents(PATH.$name.".var"));
+function driver_load_vars($name){
+    $vars = parse_ini_file(PATH.$name.".ini", true);
     return $vars;
 }
     
     
     
-function __template_check($name){
-
-	if ( is_file(PATH.$name) )
-	    return true;
-	else
-	    return false;
+function driver_template_check($name){
+    if ( is_file(PATH.$name) )
+        return true;
+    else
+        return false;
 }
 
 function driver_template_delete($name){
-
-	if (__template_check($name) == false)
-            return false;
-
-        if (unlink(PATH.$name) == false)
-            return false;
-        unlink(PATH.$name.".var");
-    return true;        
-    
+    if (unlink(PATH.$name) == false || unlink(PATH.$name.".ini") == false){
+        return false;
+    }
+return true;        
 }
-
-
-function __template_create_file($path,$file){
-
-    $f = file_put_contents($path, $file);
-        if (!is_file($path)) {
-            return false;  
-        }
-        
-    return true;
-}
-    
-//} else {   
-//    require_once('template_mock.inc.php');
-//}
-
-
-
-
-
-
-
 
 ?>
