@@ -99,7 +99,6 @@ function template_fetch($name){
         return false;
     }
     
-    
     $arr_vars = driver_load_vars($name);
     $tpl = driver_load_template($name);
     

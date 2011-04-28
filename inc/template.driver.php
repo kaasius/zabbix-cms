@@ -12,12 +12,10 @@ function driver_save_template($name, $file, $array_vars, $create){
     if (is_file($path) != true || is_file($path) == true && $create == true){
         file_put_contents($path, $file);
         if (!is_file($path)) {
-            die("1");
             return false;  
         }
         driver_save_vars($array_vars,$name);
     } else if (is_file($path) == true && $create != false){
-        die("2");
         return false; 
     }
     return true;
