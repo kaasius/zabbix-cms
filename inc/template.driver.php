@@ -1,10 +1,13 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/lang/ru/lang_inc.php");
-/*
- * Драйвер для работы шаблонов
- */
+/***********************************************************************************************************
+ * Драйвер для работы библиотеки шаблонов, записывающий шаблон и переменные из него (в ini файл) на диск.  *
+ * Так же считывает, удаляет, обновляет шаблон и переменные.                                               *         
+ ***********************************************************************************************************/
 
+
+require_once($_SERVER["DOCUMENT_ROOT"]."/lang/ru/lang_inc.php");
 define("PATH",$_SERVER['DOCUMENT_ROOT']."/tpl/");
+
 
 // запись шаблона на диск
 function driver_save_template($name, $file, $array_vars, $create){
@@ -66,7 +69,7 @@ function driver_template_check($name){
 function driver_template_delete($name){
     if (@unlink(PATH.$name) == false || @unlink(PATH.$name.".ini") == false){
         error_handler("del", "driver_tmp");
-        return false;
+        return true;
     }
 return true;        
 }
