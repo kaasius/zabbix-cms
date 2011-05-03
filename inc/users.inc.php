@@ -9,7 +9,7 @@ function users_add($email,$pass){
     if (empty($email)){
         return false;
     }
-    if (preg_match('/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$/si', $email) != "1"){
+    if (!preg_match('/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$/si', $email)){
         return false;
     }
     if (empty($pass)){
@@ -101,7 +101,8 @@ function users_logout($email){
         $_SESSION['pwd'] == '';
         session_destroy();
         return true;
-    } else {
+    } 
+    else {
         return false;
     }       
 }
