@@ -1,19 +1,7 @@
 <?php
-/*****************************************************************************************
- * Библиотека для работы с шаблонами, состоящая из четырёх основных функций:             *
- *                                                                                       *
- * template_add - добавление шаблона. Параметры: $template (шаблон), $name (название),   * 
- * $create (при true - разрешить перезапись, если шаблон существует)                     *
- *                                                                                       *
- * template_update - обновление шаблона. Параметры: $name (название)                     *
- * и $array_upd (массив: ключ action - одно из 3-ёх возможных видов обновления:          * 
- * var, template, all - обновление одной переменной, шаблона и всего соответственно;     * 
- * ключ template - шаблон; ключ vars - переменные)                                       *
- *                                                                                       *
- * template_fetch - вывод шаблона на сайт, параметр один- $name (название)               *
- *                                                                                       *        
- * template_delete - удаление шаблона, параметр один- $name (название)                   *
- *****************************************************************************************/
+/*
+* Библиотека для работы с шаблонами, состоящая из четырёх основных функций:             
+*/
 
 
 if(!defined('TEST_MODE')) define("TEST_MODE",false);
@@ -21,24 +9,37 @@ require_once("errors.list.php");
 require_once("template.driver.php");
 
 
-// Обновляем одну переменную при редактировании шаблона
+/** Обновляем одну переменную при её обновлении
+ * @param array $array_new_vars новая переменная
+ * @param string $name имя шаблона
+ * @return array массив обновлённых переменных
+ */
 function __template_update_var($array_new_vars,$name){ 
     $array_old_vars = driver_load_vars($name);
     $array_vars = array_merge($array_old_vars, $array_new_vars);   
     return $array_vars;
 }
 
-
-// Обновляем переменные при редактировании шаблона
-function __template_update_vars($array_vars,$name){
-    $array_new = __template_parse_vars($array_vars);
+/** Обновляем переменные при обновлении шаблона
+ *
+ * @param array $array_vars массив заполненых переменных
+ * @param string $name имя шаблона
+ * @param string $template html шаблон
+ * @return array обновлённый массив переменных
+ */
+function __template_update_vars($array_vars,$name,$template){
+    $array_new = __template_parse_vars($template);
     $array_prev_vars = driver_load_vars($name);
-    $array_new_vars = array_intersect_key($array_new, $array_prev_vars);
+    $array_empty_vars = array_intersect_key($array_new, $array_prev_vars);
+    $array_new_vars = array_merge($array_empty_vars, $array_vars);
     return $array_new_vars;
 }
 
-
-// Парсим переменные
+/** Парсим переменные
+ *
+ * @param string $template html шаблон
+ * @return array массив переменных 
+ */
 function __template_parse_vars($template){
     $array_vars = array();
     preg_match_all("/{(^{)*(^})*([A-Za-z0-9_\-]+)}/", $template, $vars);
@@ -54,7 +55,14 @@ function __template_parse_vars($template){
 }
 
 
-// Добавление шаблона
+
+/** Добавление шаблона
+ *
+ * @param string $template html шаблон
+ * @param string $name имя шаблона
+ * @param bool $create разрешать перезаписывать или нет (по умолчанию false)
+ * @return true/false 
+ */
 function template_add($template,$name,$create=false){
     if (empty($template)){
         error_handler("empty_tmp", "lib_tmp");
@@ -73,14 +81,23 @@ return true;
 }
 
 
-// Удаление шаблона
+/** Удаление шаблона
+ *
+ * @param string $name имя шаблона
+ * @return true 
+ */
 function template_delete($name){
     driver_template_delete($name);
     return true;          
 }
 
 
-// Обновление шаблона
+/** Обновление шаблона
+ *
+ * @param string $name имя шаблона
+ * @param array $array_upd массив обновляемых значений
+ * @return true/false
+ */
 function template_update($name,$array_upd){
     if (empty($name)){
         error_handler("empty_name", "lib_tmp");
@@ -93,21 +110,21 @@ function template_update($name,$array_upd){
     $action = $array_upd["action"];
     switch($action) {
         case "var":
-            __template_update_var($array_upd["vars"],$name);
+            $array_new_vars = __template_update_var($array_upd["vars"],$name);
             if (driver_save_vars($array_new_vars, $name) == false){
                 error_handler("error", "lib_tmp");
                 return false;
             }
             return true;  
             break;
-        case "template":
-            $array_new_vars = __template_update_vars($array_upd["template"],$name);
-             if (driver_save_vars($array_new_vars, $name) == false){
-                error_handler("error", "lib_tmp");
-                return false;
-            }
+        case "template":            
+            $array_new_vars = __template_update_vars($array_upd["vars"],$name,$array_upd["template"]);          
+            if (driver_save_template($name, $array_upd["template"], $array_new_vars, true) != true){
+                    error_handler("error", "lib_tmp");
+                    return false;
+            }            
             return true;           
-            break;
+            break;            
         case "all":
             $array_new = __template_parse_vars($array_upd["template"]);
             $array_new_vars = array_intersect_key($array_upd["vars"], $array_new);
@@ -123,7 +140,11 @@ function template_update($name,$array_upd){
 }
 
 
-// Выводим шаблон
+/** Вывод шаблона
+ *
+ * @param string $name имя шаблона
+ * @return string html код 
+ */
 function template_fetch($name){
     if(driver_template_check($name) == false){
         error_handler("error", "lib_tmp");
